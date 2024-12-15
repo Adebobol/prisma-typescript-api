@@ -60,6 +60,10 @@ model Address {
 
   updatedAt DateTime @default(now())
 
+  defaultBillingAddress Int?
+
+  defaultShippingAddress Int?
+
   @@map("addresses")
 
 }
