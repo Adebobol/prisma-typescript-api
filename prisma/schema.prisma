@@ -42,11 +42,11 @@ model Product {
 
   name String
 
-  description String
+  description String @db.Text
 
   price Decimal
 
-  tags String
+  tags String?
 
   createdAt DateTime @default(now())
 

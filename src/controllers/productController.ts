@@ -25,7 +25,15 @@ export const getProduct = async (
   req: Request,
   res: Response,
   next: NextFunction
-) => {};
+) => {
+  const product = await prisma.product.findFirstOrThrow({
+    where: { id: +req.params.id },
+  });
+
+  res.status(200).json({
+    data: product,
+  });
+};
 
 export const updateProduct = async (
   req: Request,
@@ -54,6 +62,23 @@ export const updateProduct = async (
   });
 };
 
-export const deleteProduct = async (req: Request, res: Response) => {};
+export const deleteProduct = async (req: Request, res: Response) => {
+  await prisma.product.delete({ where: { id: +req.params.id } });
 
-export const listProducts = async (req: Request, res: Response) => {};
+  res.status(204).json({
+    message: "Product deleted",
+  });
+};
+
+export const listProducts = async (req: Request, res: Response) => {
+  const allProducts = await prisma.product.findMany({
+    skip: req.query.skip && Number.isNaN(+req.query.skip) ? +req.query.skip : 0,
+    // take: 2,
+  });
+
+  res.status(200).json({
+    message: "Success",
+    total: allProducts.length,
+    data: allProducts,
+  });
+};
