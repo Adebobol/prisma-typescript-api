@@ -3,7 +3,7 @@ import { AppError } from "../errors/ApiError";
 import * as jwt from "jsonwebtoken";
 import { JWT_SECRET } from "../secrets";
 import { prismaClient } from "..";
-const authMiddleware = async (
+export const authMiddleware = async (
   req: Request,
   res: Response,
   next: NextFunction
@@ -24,4 +24,15 @@ const authMiddleware = async (
   next();
 };
 
-export default authMiddleware;
+// export default authMiddleware;
+
+export const restrictTo = (...roles: any) => {
+  return (req: Request, res: Response, next: NextFunction) => {
+    if (!roles.includes(req.user.role)) {
+      return next(
+        new AppError("You don't have access to perform this action", 403)
+      );
+    }
+    next();
+  };
+};
