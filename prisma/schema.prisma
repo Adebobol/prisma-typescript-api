@@ -28,8 +28,14 @@ model  User {
   password String
 
   role Role @default(USER)
+  
+  defaultBillingAddress Int?
+
+  defaultShippingAddress Int?
 
   address Address[]
+
+  cartItem CartItem[]
 
   createdAt DateTime @default(now())
 
@@ -56,13 +62,10 @@ model Address {
 
   user User @relation(fields: [userId], references: [id])
 
+
   createdAt DateTime @default(now())
 
   updatedAt DateTime @default(now())
-
-  defaultBillingAddress Int?
-
-  defaultShippingAddress Int?
 
   @@map("addresses")
 
@@ -79,9 +82,29 @@ model Product {
 
   tags String?
 
+  cartItem CartItem[]
+
   createdAt DateTime @default(now())
 
   updatedAt DateTime @updatedAt
 
   @@map("products")
+}
+
+model CartItem{
+  id Int @id @default(autoincrement())
+
+  userId Int
+  user User @relation(fields:[userId], references: [id])
+
+  productId Int
+  product Product @relation(fields: [productId], references: [id])
+
+  quantity Int
+
+  createdAt DateTime @default(now())
+
+  updatedAt DateTime @updatedAt
+
+  @@map("cart_items")
 }

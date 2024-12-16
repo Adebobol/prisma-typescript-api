@@ -7,7 +7,7 @@ export const signUpSchema = z.object({
 });
 
 export const updateUserSchema = z.object({
-  name: z.string(),
-  defaultShippingAddress: z.number().nullable(),
-  defaultBillingAddress: z.number().nullable(),
+  name: z.string().optional(),
+  defaultShippingAddress: z.number().optional(),
+  defaultBillingAddress: z.number().optional(),
 });

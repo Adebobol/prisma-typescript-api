@@ -37,7 +37,7 @@ export const deleteAddress = async (req: Request, res: Response) => {
 };
 
 export const listAddress = async (req: Request, res: Response) => {
-  const addresses = await prisma.address.findMany({
+  const addAddress = await prisma.address.findMany({
     where: { userId: req.user.id },
   });
 
@@ -72,6 +72,13 @@ export const updateUser = async (
 
   if (!shippingAddress && !billingAddress) {
     return next(new AppError("not address matches this billing id ", 400));
+  }
+
+  if (
+    shippingAddress.userId !== req.user.id &&
+    billingAddress.userId !== req.user.id
+  ) {
+    return next(new AppError("You can't perform this update", 400));
   }
 
   const updatedUser = await prisma.user.update({
